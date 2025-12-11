@@ -1,0 +1,6 @@
+com\health\tools\userservice\infrastructure\mapper\UserMapperTest.class
+com\health\tools\userservice\domain\model\UserAccountTest.class
+com\health\tools\userservice\infrastructure\adapter\PasswordEncoderAdapterTest.class
+com\health\tools\userservice\infrastructure\adapter\UserRepositoryAdapterTest.class
+com\health\tools\userservice\domain\model\UserIdTest.class
+com\health\tools\userservice\domain\model\EmailTest.class

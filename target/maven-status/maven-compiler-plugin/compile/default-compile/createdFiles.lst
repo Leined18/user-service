@@ -1,0 +1,12 @@
+com\health\tools\userservice\domain\model\UserRole.class
+com\health\tools\userservice\domain\port\PasswordEncoderPort.class
+com\health\tools\userservice\infrastructure\adapter\UserRepositoryJpaPort.class
+com\health\tools\userservice\infrastructure\mapper\UserMapper.class
+com\health\tools\userservice\domain\port\UserRepositoryPort.class
+com\health\tools\userservice\infrastructure\entity\UserRoleJpaEnum.class
+com\health\tools\userservice\domain\model\Email.class
+com\health\tools\userservice\infrastructure\entity\UserJpaEntity.class
+com\health\tools\userservice\domain\model\UserId.class
+com\health\tools\userservice\domain\model\UserAccount.class
+com\health\tools\userservice\infrastructure\adapter\UserRepositoryAdapter.class
+com\health\tools\userservice\infrastructure\adapter\PasswordEncoderAdapter.class

@@ -1,0 +1,89 @@
+# User Service - Standalone Docker Compose Configuration
+
+services:
+  user-service-db:
+    image: postgres:16-alpine
+    container_name: user-service-db
+    environment:
+      POSTGRES_DB: ${USERSERVICE_DB_NAME:-userservice_db}
+      POSTGRES_USER: ${USERSERVICE_DB_USER:-userservice_user}
+      POSTGRES_PASSWORD: ${USERSERVICE_DB_PASSWORD:-userservice_secret}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "${USERSERVICE_DB_PORT:-5433}:5432"
+    volumes:
+      - user_service_db_data:/var/lib/postgresql/data
+    tmpfs:
+      - /tmp
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${USERSERVICE_DB_USER:-userservice_user}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 512M
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "3"
+    networks:
+      - user-service-network
+    restart: unless-stopped
+
+  user-service:
+    build:
+      context: ../..
+      dockerfile: modules/user-service/Dockerfile
+    image: health-tools/user-service:1.0.0
+    container_name: user-service-app
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-docker}
+      SERVER_PORT: 8083
+      SPRING_DATASOURCE_URL: jdbc:postgresql://user-service-db:5432/${USERSERVICE_DB_NAME:-userservice_db}
+      SPRING_DATASOURCE_USERNAME: ${USERSERVICE_DB_USER:-userservice_user}
+      SPRING_DATASOURCE_PASSWORD: ${USERSERVICE_DB_PASSWORD:-userservice_secret}
+      LOGGING_FILE_PATH: /app/logs
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      JAVA_OPTS: ${JAVA_OPTS:--Xms256m -Xmx512m}
+    ports:
+      - "${USERSERVICE_PORT:-8083}:8083"
+    volumes:
+      - user_service_logs:/app/logs
+    healthcheck:
+      test: ["CMD-SHELL", "wget --quiet --tries=1 --spider http://localhost:8083/api/v1/actuator/health || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          cpus: "0.75"
+          memory: 768M
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "3"
+    depends_on:
+      user-service-db:
+        condition: service_healthy
+    networks:
+      - user-service-network
+    restart: unless-stopped
+
+networks:
+  user-service-network:
+    driver: bridge
+    name: user-service-network
+
+volumes:
+  user_service_db_data:
+    name: user_service_db_data
+  user_service_logs:
+    name: user_service_logs

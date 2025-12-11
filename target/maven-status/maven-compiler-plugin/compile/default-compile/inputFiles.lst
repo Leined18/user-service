@@ -1,0 +1,12 @@
+C:\Users\erdan\Desktop\Proyects\tools\modules\user-service\src\main\java\com\health\tools\userservice\domain\model\UserRole.java
+C:\Users\erdan\Desktop\Proyects\tools\modules\user-service\src\main\java\com\health\tools\userservice\domain\port\PasswordEncoderPort.java
+C:\Users\erdan\Desktop\Proyects\tools\modules\user-service\src\main\java\com\health\tools\userservice\domain\port\UserRepositoryPort.java
+C:\Users\erdan\Desktop\Proyects\tools\modules\user-service\src\main\java\com\health\tools\userservice\infrastructure\adapter\UserRepositoryAdapter.java
+C:\Users\erdan\Desktop\Proyects\tools\modules\user-service\src\main\java\com\health\tools\userservice\infrastructure\adapter\PasswordEncoderAdapter.java
+C:\Users\erdan\Desktop\Proyects\tools\modules\user-service\src\main\java\com\health\tools\userservice\infrastructure\entity\UserJpaEntity.java
+C:\Users\erdan\Desktop\Proyects\tools\modules\user-service\src\main\java\com\health\tools\userservice\infrastructure\adapter\UserRepositoryJpaPort.java
+C:\Users\erdan\Desktop\Proyects\tools\modules\user-service\src\main\java\com\health\tools\userservice\infrastructure\mapper\UserMapper.java
+C:\Users\erdan\Desktop\Proyects\tools\modules\user-service\src\main\java\com\health\tools\userservice\infrastructure\entity\UserRoleJpaEnum.java
+C:\Users\erdan\Desktop\Proyects\tools\modules\user-service\src\main\java\com\health\tools\userservice\domain\model\Email.java
+C:\Users\erdan\Desktop\Proyects\tools\modules\user-service\src\main\java\com\health\tools\userservice\domain\model\UserId.java
+C:\Users\erdan\Desktop\Proyects\tools\modules\user-service\src\main\java\com\health\tools\userservice\domain\model\UserAccount.java
