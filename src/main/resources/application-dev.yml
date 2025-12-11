@@ -1,0 +1,35 @@
+server:
+  port: 8083
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: user-service
+  
+  # H2 Database para desarrollo local
+  datasource:
+    url: jdbc:h2:mem:userservice
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+    
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+
+logging:
+  level:
+    root: INFO
+    com.health.tools.userservice: DEBUG
+    org.hibernate.SQL: DEBUG
