@@ -1,20 +1,23 @@
-# Multi-stage build for User Service
+# Multi-stage build for User Service (Standalone)
 FROM eclipse-temurin:21-jdk-alpine AS builder
 
 WORKDIR /workspace/app
 
-# Copy parent pom and common module first (for better caching)
+# Copy Maven wrapper and project files
+COPY .mvn .mvn
+COPY mvnw .
 COPY pom.xml .
-COPY modules/common modules/common
 
-# Copy user-service module
-COPY modules/user-service modules/user-service
+# Download dependencies (cached layer)
+RUN ./mvnw dependency:go-offline -B || true
+
+# Copy source code
+COPY src src
 
 # Build the project
-RUN --mount=type=cache,target=/root/.m2 \
-    ./mvnw -f modules/user-service/pom.xml clean package -DskipTests && \
-    mkdir -p target && \
-    cp modules/user-service/target/*.jar target/app.jar
+RUN ./mvnw clean package -DskipTests && \
+    mkdir -p target/dependency && \
+    (cd target/dependency; jar -xf ../*.jar)
 
 # Runtime stage
 FROM eclipse-temurin:21-jre-alpine
@@ -29,7 +32,7 @@ RUN addgroup -g 1001 -S appuser && \
 WORKDIR /app
 
 # Copy jar from builder
-COPY --from=builder --chown=appuser:appuser /workspace/app/target/app.jar app.jar
+COPY --from=builder --chown=appuser:appuser /workspace/app/target/*.jar app.jar
 
 # Create logs directory
 RUN mkdir -p /app/logs && chown -R appuser:appuser /app/logs

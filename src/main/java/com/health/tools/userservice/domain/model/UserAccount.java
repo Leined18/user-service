@@ -1,11 +1,8 @@
 package com.health.tools.userservice.domain.model;
 
-import com.health.tools.common.domain.AggregateRoot;
-import com.health.tools.common.domain.DomainEvent;
+import com.health.tools.userservice.domain.shared.AggregateRoot;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -19,7 +16,7 @@ import java.util.Set;
  * - fullName no puede ser nulo o vacío
  * - Un usuario puede tener múltiples roles
  */
-public final class UserAccount implements AggregateRoot {
+public final class UserAccount extends AggregateRoot<UserId> {
     private UserId id;
     private Email email;
     private String fullName;
@@ -61,18 +58,6 @@ public final class UserAccount implements AggregateRoot {
         this.active = active;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-    }
-
-    // ============= AGGREGATE INTERFACE =============
-
-    @Override
-    public List<DomainEvent> domainEvents() {
-        return Collections.emptyList();
-    }
-
-    @Override
-    public void clearDomainEvents() {
-        // No events currently implemented
     }
 
     // ============= BUSINESS METHODS =============

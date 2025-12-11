@@ -13,6 +13,7 @@ services:
       - "${USERSERVICE_DB_PORT:-5433}:5432"
     volumes:
       - user_service_db_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     tmpfs:
       - /tmp
     healthcheck:
@@ -37,8 +38,8 @@ services:
 
   user-service:
     build:
-      context: ../..
-      dockerfile: modules/user-service/Dockerfile
+      context: .
+      dockerfile: Dockerfile
     image: health-tools/user-service:1.0.0
     container_name: user-service-app
     environment:

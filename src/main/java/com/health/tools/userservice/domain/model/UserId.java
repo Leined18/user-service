@@ -1,6 +1,6 @@
 package com.health.tools.userservice.domain.model;
 
-import com.health.tools.common.domain.ValueObject;
+import com.health.tools.userservice.domain.shared.ValueObject;
 import java.util.Objects;
 import java.util.UUID;
 
