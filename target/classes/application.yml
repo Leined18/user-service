@@ -1,5 +1,5 @@
 server:
-  port: ${SERVER_PORT:8083}
+  port: ${USER_SERVICE_PORT:8083}
   servlet:
     context-path: /api/v1
 
@@ -8,24 +8,24 @@ spring:
     name: user-service
   
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5433/userservice_db}
-    username: ${SPRING_DATASOURCE_USERNAME:userservice_user}
-    password: ${SPRING_DATASOURCE_PASSWORD:userservice_secret}
-    driver-class-name: org.postgresql.Driver
+    url: ${DATABASE_URL:jdbc:h2:mem:userservice_db}
+    username: ${DB_USER:sa}
+    password: ${DB_PASSWORD:}
+    driver-class-name: ${DATABASE_DRIVER:org.h2.Driver}
     hikari:
-      maximum-pool-size: 10
-      minimum-idle: 2
-      connection-timeout: 20000
+      maximum-pool-size: ${DB_POOL_SIZE:10}
+      minimum-idle: ${DB_MIN_IDLE:2}
+      connection-timeout: ${DB_CONNECTION_TIMEOUT:20000}
       idle-timeout: 300000
       max-lifetime: 1200000
 
   jpa:
     hibernate:
-      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:validate}
-    show-sql: ${SPRING_JPA_SHOW_SQL:false}
+      ddl-auto: update
+    show-sql: false
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+        dialect: ${DATABASE_DIALECT:org.hibernate.dialect.H2Dialect}
         format_sql: true
         use_sql_comments: true
         jdbc:
@@ -35,11 +35,11 @@ spring:
 
 logging:
   level:
-    root: INFO
-    com.health.tools.userservice: ${LOG_LEVEL:DEBUG}
+    root: ${LOG_LEVEL:INFO}
+    com.health.tools.userservice: DEBUG
   file:
-    path: ${LOGGING_FILE_PATH:/app/logs}
-    name: ${LOGGING_FILE_PATH:/app/logs}/user-service.log
+    path: ${LOG_PATH:./logs}
+    name: ${LOG_PATH:./logs}/user-service.log
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"

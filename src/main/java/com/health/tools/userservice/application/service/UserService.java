@@ -6,13 +6,16 @@ import com.health.tools.userservice.application.dto.UserResponse;
 import com.health.tools.userservice.domain.model.Email;
 import com.health.tools.userservice.domain.model.UserAccount;
 import com.health.tools.userservice.domain.model.UserId;
+import com.health.tools.userservice.domain.model.UserRole;
 import com.health.tools.userservice.domain.port.PasswordEncoderPort;
 import com.health.tools.userservice.domain.port.UserRepositoryPort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -105,6 +108,23 @@ public class UserService {
                 user.getCreatedAt(),
                 user.getUpdatedAt()
             );
+        }
+
+        // Update roles if provided
+        if (request.roles() != null && !request.roles().isEmpty()) {
+            // Clear existing roles and add new ones
+            Set<UserRole> currentRoles = new HashSet<>(user.getRoles());
+            for (UserRole role : currentRoles) {
+                user.revokeRole(role);
+            }
+            for (String roleStr : request.roles()) {
+                try {
+                    UserRole role = UserRole.valueOf(roleStr.toUpperCase());
+                    user.assignRole(role);
+                } catch (IllegalArgumentException e) {
+                    throw new IllegalArgumentException("Invalid role: " + roleStr);
+                }
+            }
         }
 
         if (request.active() != null) {
