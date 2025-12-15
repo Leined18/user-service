@@ -1,25 +1,4 @@
-# Multi-stage build for User Service (Standalone)
-FROM eclipse-temurin:21-jdk-alpine AS builder
-
-WORKDIR /workspace/app
-
-# Copy Maven wrapper and project files
-COPY .mvn .mvn
-COPY mvnw .
-COPY pom.xml .
-
-# Download dependencies (cached layer)
-RUN ./mvnw dependency:go-offline -B || true
-
-# Copy source code
-COPY src src
-
-# Build the project
-RUN ./mvnw clean package -DskipTests && \
-    mkdir -p target/dependency && \
-    (cd target/dependency; jar -xf ../*.jar)
-
-# Runtime stage
+# Dockerfile for User Service (Standalone)
 FROM eclipse-temurin:21-jre-alpine
 
 # Install wget for healthcheck
@@ -31,8 +10,8 @@ RUN addgroup -g 1001 -S appuser && \
 
 WORKDIR /app
 
-# Copy jar from builder
-COPY --from=builder --chown=appuser:appuser /workspace/app/target/*.jar app.jar
+# Copy pre-built JAR
+COPY target/*.jar app.jar
 
 # Create logs directory
 RUN mkdir -p /app/logs && chown -R appuser:appuser /app/logs
